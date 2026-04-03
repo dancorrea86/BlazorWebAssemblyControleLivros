@@ -1,0 +1,104 @@
+﻿@page "/cadastrar-livro"
+@using BlazorWebAssemblyControleFinancas.Models
+@inject HttpClient Http
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="bi bi-book"></i> Novo Livro Lido</h3>
+        </div>
+        <div class="card-body">
+            <EditForm Model="@novoLivro" OnValidSubmit="SalvarLivro">
+                <DataAnnotationsValidator />
+
+                <div class="row g-3">
+                    @* Título *@
+                    <div class="col-md-6">
+                        <label class="form-label">Título</label>
+                        <InputText @bind-Value="novoLivro.Titulo" class="form-control" placeholder="Ex: O Hobbit" />
+                    </div>
+
+                    @* Autor *@
+                    <div class="col-md-6">
+                        <label class="form-label">Autor</label>
+                        <InputText @bind-Value="novoLivro.Autor" class="form-control" placeholder="J.R.R. Tolkien" />
+                    </div>
+
+                    @* Gênero *@
+                    <div class="col-md-4">
+                        <label class="form-label">Gênero</label>
+                        <InputSelect @bind-Value="novoLivro.Genero" class="form-select">
+                            <option value="Ficção">Ficção</option>
+                            <option value="Não-Ficção">Não-Ficção</option>
+                            <option value="Terror">Terror</option>
+                            <option value="Biografia">Biografia</option>
+                        </InputSelect>
+                    </div>
+
+                    @* Data *@
+                    <div class="col-md-4">
+                        <label class="form-label">Data de Conclusão</label>
+                        <InputDate @bind-Value="novoLivro.DataLeitura" class="form-control" />
+                    </div>
+
+                    @* Avaliação *@
+                    <div class="col-md-4">
+                        <label class="form-label">Nota (1 a 5)</label>
+                        <InputNumber @bind-Value="novoLivro.Avaliacao" class="form-control" min="1" max="5" />
+                    </div>
+
+                    @* Comentários *@
+                    <div class="col-12">
+                        <label class="form-label">Resenha / Notas</label>
+                        <InputTextArea @bind-Value="novoLivro.Comentarios" class="form-control" rows="3" />
+                    </div>
+
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="bi bi-check-lg"></i> Salvar Livro
+                        </button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private Livro novoLivro = new();
+    private bool enviando = false;
+    private string mensagemStatus = "";
+
+    private async Task SalvarLivro()
+    {
+        enviando = true;
+        mensagemStatus = "Enviando para a planilha...";
+
+        // URL gerada na implantação do Google Apps Script
+        string urlPlanilha = "https://script.google.com/macros/s/AKfycbwPXCD0EH7T9TSEhO3Zo1fzbThk3qhMJv3-CUiL7oA4lxMNcgkuNOFDMZ7gezLlB6Lf/exec";
+
+        try
+        {
+            // Enviamos o objeto para o Google Script via POST
+            var resposta = await Http.PostAsJsonAsync(urlPlanilha, novoLivro);
+
+            if (resposta.IsSuccessStatusCode)
+            {
+                mensagemStatus = "✅ Livro salvo com sucesso!";
+                novoLivro = new(); // Limpa o formulário
+            }
+            else
+            {
+                mensagemStatus = "❌ Erro ao salvar os dados.";
+            }
+        }
+        catch (Exception ex)
+        {
+            mensagemStatus = $"❌ Erro de conexão: {ex.Message}";
+        }
+        finally
+        {
+            enviando = false;
+        }
+    }
+}
