@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+  </Folder>
+  <Project Path="BlazorWebAssemblyControleLivros.Api/BlazorWebAssemblyControleLivros.API.csproj" />
+  <Project Path="BlazorWebAssemblyControleLivros.Web/BlazorWebAssemblyControleLivros.Web.csproj" />
+</Solution>

@@ -1,5 +1,6 @@
 ﻿@page "/dashboard"
 @using System.Linq
+@using System.Text.Json
 @inject HttpClient Http
 
 <div class="container mt-4">
@@ -98,18 +99,20 @@
     private int lidosEsteAno;
     private string generoFavorito = "-";
     private IEnumerable<IGrouping<string, LivroDTO>> livrosPorGenero = Enumerable.Empty<IGrouping<string, LivroDTO>>();
-    private string urlPlanilha = "https://script.google.com/macros/s/AKfycbyZaJmunoDpFGCJWYWaoZL7q8_-3Znr3xyvF23f6VX5ZDK9QFCl2fT72BTEMgcxz88x/exec";
+    
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             // Substitua pela sua URL real do Google Apps Script
-            var response = await Http.GetFromJsonAsync<List<LivroDTO>>(urlPlanilha);
+            var response = await Http.GetAsync("api/livros");
+
             
             if (response != null)
             {
-                livros = response;
+                var json = await response.Content.ReadAsStringAsync();
+                livros = JsonSerializer.Deserialize<List<LivroDTO>>(json);
                 CalcularMetricas();
             }
         }

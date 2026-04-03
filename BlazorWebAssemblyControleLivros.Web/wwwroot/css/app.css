@@ -1,5 +1,13 @@
+/* Garante que a base do navegador ocupe a tela toda */
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    height: 100%;
+    margin: 0;
+}
+
+/* O Blazor renderiza o conteúdo dentro de uma tag customizada ou div#app */
+#app {
+    height: 100%;
 }
 
 h1:focus {

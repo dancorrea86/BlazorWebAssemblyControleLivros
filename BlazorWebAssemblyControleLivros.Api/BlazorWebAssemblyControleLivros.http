@@ -1,0 +1,6 @@
+@BlazorWebAssemblyControleLivros_HostAddress = http://localhost:5204
+
+GET {{BlazorWebAssemblyControleLivros_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

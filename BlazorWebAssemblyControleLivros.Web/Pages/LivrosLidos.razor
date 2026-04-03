@@ -60,14 +60,13 @@
 
 @code {
     private List<LivroDTO>? livros;
-    private string urlPlanilha = "https://script.google.com/macros/s/AKfycbyZaJmunoDpFGCJWYWaoZL7q8_-3Znr3xyvF23f6VX5ZDK9QFCl2fT72BTEMgcxz88x/exec";
-
+    
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            // O Google Script no doGet retorna um JSON
-            livros = await Http.GetFromJsonAsync<List<LivroDTO>>(urlPlanilha);
+            
+            livros = await Http.GetFromJsonAsync<List<LivroDTO>>("api/livros");
         }
         catch (Exception ex)
         {

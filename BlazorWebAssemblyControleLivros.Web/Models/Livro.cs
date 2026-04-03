@@ -1,4 +1,4 @@
-﻿namespace BlazorWebAssemblyControleFinancas.Models
+﻿namespace BlazorWebAssemblyControleLivros.Web.Models
 {
     public class Livro
     {

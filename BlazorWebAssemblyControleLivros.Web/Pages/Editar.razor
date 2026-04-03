@@ -1,0 +1,64 @@
+﻿@page "/editar"
+@using BlazorWebAssemblyControleLivros.Web.Models
+
+<h3>Editar</h3>
+
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="bi bi-book"></i> Editar Livro Lido</h3>
+        </div>
+        <div class="card-body">
+            <EditForm Model="@livro" OnValidSubmit="SalvarLivro" >
+                <div>
+                    <div>
+                        <label for="titulo">Título:</label>
+                        <InputText id="titulo" @bind-Value="livro.Titulo" class="form-control" />
+                    </div>
+                    
+                    <div>
+                        <label for="autor">Autor:</label>
+                        <InputText id="autor" @bind-Value="livro.Autor" class="form-control" />
+                    </div>
+                                        
+                    <div>
+                        <label for="genero">Genero:</label>
+                        <InputText id="genero" @bind-Value="livro.Genero" class="form-control" />
+                    </div>
+
+                    <div>
+                        <label for="data">Data Leitura:</label>
+                        <InputDate id="data" @bind-Value="livro.DataLeitura" class="form-control" />
+                    </div>
+
+                    <div>
+                        <label for="avaliacao">Avaliacao:</label>
+                        <InputNumber id="avaliacao" @bind-Value="livro.Avaliacao" class="form-control" />
+                    </div>
+
+                    <div>
+                        <label for="comentario">Comentarios:</label>
+                        <InputText id="comentario" @bind-Value="livro.Comentarios" class="form-control" />
+                    </div>
+
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="bi bi-check-lg"></i> Salvar Livro
+                        </button>
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    private Livro livro = new Livro();
+
+    private void SalvarLivro()
+    {
+        // Lógica para salvar as alterações do livro
+    }
+}

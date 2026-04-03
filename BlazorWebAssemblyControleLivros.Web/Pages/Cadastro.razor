@@ -1,5 +1,5 @@
 ﻿@page "/cadastrar-livro"
-@using BlazorWebAssemblyControleFinancas.Models
+@using BlazorWebAssemblyControleLivros.Web.Models
 @inject HttpClient Http
 
 <div class="container mt-5">
@@ -72,29 +72,20 @@
     private async Task SalvarLivro()
     {
         enviando = true;
-        mensagemStatus = "Enviando para a planilha...";
+        mensagemStatus = "Enviando...";
 
-        // URL gerada na implantação do Google Apps Script
-        string urlPlanilha = "https://script.google.com/macros/s/AKfycbyZaJmunoDpFGCJWYWaoZL7q8_-3Znr3xyvF23f6VX5ZDK9QFCl2fT72BTEMgcxz88x/exec";
-
-        // Serializamos manualmente para JSON
-        var jsonDados = System.Text.Json.JsonSerializer.Serialize(novoLivro);
-    
-        // Enviamos como StringContent com o tipo text/plain para evitar o Preflight do CORS
-        var content = new StringContent(jsonDados, System.Text.Encoding.UTF8, "text/plain");
         try
         {
-            // Enviamos o objeto para o Google Script via POST
-            var resposta = await Http.PostAsync(urlPlanilha, content);
+            var resposta = await Http.PostAsJsonAsync("api/livros", novoLivro);
 
             if (resposta.IsSuccessStatusCode)
             {
                 mensagemStatus = "✅ Livro salvo com sucesso!";
-                novoLivro = new(); // Limpa o formulário
+                novoLivro = new();
             }
             else
             {
-                mensagemStatus = "❌ Erro ao salvar os dados.";
+                mensagemStatus = "❌ Erro no servidor backend.";
             }
         }
         catch (Exception ex)
