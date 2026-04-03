@@ -75,12 +75,17 @@
         mensagemStatus = "Enviando para a planilha...";
 
         // URL gerada na implantação do Google Apps Script
-        string urlPlanilha = "https://script.google.com/macros/s/AKfycbwPXCD0EH7T9TSEhO3Zo1fzbThk3qhMJv3-CUiL7oA4lxMNcgkuNOFDMZ7gezLlB6Lf/exec";
+        string urlPlanilha = "https://script.google.com/macros/s/AKfycbyZaJmunoDpFGCJWYWaoZL7q8_-3Znr3xyvF23f6VX5ZDK9QFCl2fT72BTEMgcxz88x/exec";
 
+        // Serializamos manualmente para JSON
+        var jsonDados = System.Text.Json.JsonSerializer.Serialize(novoLivro);
+    
+        // Enviamos como StringContent com o tipo text/plain para evitar o Preflight do CORS
+        var content = new StringContent(jsonDados, System.Text.Encoding.UTF8, "text/plain");
         try
         {
             // Enviamos o objeto para o Google Script via POST
-            var resposta = await Http.PostAsJsonAsync(urlPlanilha, novoLivro);
+            var resposta = await Http.PostAsync(urlPlanilha, content);
 
             if (resposta.IsSuccessStatusCode)
             {

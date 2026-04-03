@@ -1,0 +1,89 @@
+﻿@page "/lista-livros"
+@using System.Net.Http.Json
+@inject HttpClient Http
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>📚 Meus Livros Lidos</h2>
+        <a href="/cadastrar-livro" class="btn btn-primary">Novo Registro</a>
+    </div>
+
+    @if (livros == null)
+    {
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p>Carregando biblioteca...</p>
+        </div>
+    }
+    else if (!livros.Any())
+    {
+        <div class="alert alert-warning">Nenhum livro encontrado na planilha.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover shadow-sm border">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Gênero</th>
+                        <th>Data Leitura</th>
+                        <th>Nota</th>
+                        <th>Comentários</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var livro in livros)
+                    {
+                        <tr>
+                            <td class="fw-bold">@livro.titulo</td>
+                            <td>@livro.autor</td>
+                            <td><span class="badge bg-info text-dark">@livro.genero</span></td>
+                            <td>@(DateTime.TryParse(livro.dataLeitura?.ToString(), out var dt) ? dt.ToShortDateString() : "-")</td>
+                            <td>
+                                @for (int i = 0; i < 5; i++)
+                                {
+                                    <i class="bi @(i < livro.avaliacao ? "bi-star-fill text-warning" : "bi-star text-muted")"></i>
+                                }
+                            </td>
+                            <td class="text-truncate" style="max-width: 200px;" title="@livro.comentarios">
+                                @livro.comentarios
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    private List<LivroDTO>? livros;
+    private string urlPlanilha = "https://script.google.com/macros/s/AKfycbyZaJmunoDpFGCJWYWaoZL7q8_-3Znr3xyvF23f6VX5ZDK9QFCl2fT72BTEMgcxz88x/exec";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // O Google Script no doGet retorna um JSON
+            livros = await Http.GetFromJsonAsync<List<LivroDTO>>(urlPlanilha);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar: {ex.Message}");
+            livros = new List<LivroDTO>();
+        }
+    }
+
+    // DTO simples para mapear o JSON do Google (letras minúsculas conforme o Script JS)
+    public class LivroDTO
+    {
+        public string titulo { get; set; } = "";
+        public string autor { get; set; } = "";
+        public string genero { get; set; } = "";
+        public object dataLeitura { get; set; }
+        public int avaliacao { get; set; }
+        public string comentarios { get; set; } = "";
+    }
+}

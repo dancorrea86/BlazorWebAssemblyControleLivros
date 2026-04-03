@@ -1,0 +1,141 @@
+﻿@page "/dashboard"
+@using System.Linq
+@inject HttpClient Http
+
+<div class="container mt-4">
+    <h2 class="mb-4">📊 Dashboard de Leitura</h2>
+
+    @if (livros == null)
+    {
+        <div class="text-center mt-5">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p>Calculando estatísticas...</p>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4 mb-5">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h6 class="card-title opacity-75">Total de Livros</h6>
+                        <h2 class="display-4 fw-bold">@livros.Count</h2>
+                        <i class="bi bi-book-half fs-1 opacity-25"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h6 class="card-title opacity-75">Média de Avaliação</h6>
+                        <h2 class="display-4 fw-bold">@mediaAvaliacao.ToString("N1")</h2>
+                        <div class="text-warning">
+                            <i class="bi bi-star-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h6 class="card-title opacity-75">Lidos este Ano (@DateTime.Now.Year)</h6>
+                        <h2 class="display-4 fw-bold">@lidosEsteAno</h2>
+                        <i class="bi bi-calendar-check fs-1 opacity-25"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-dark shadow-sm border-0">
+                    <div class="card-body text-center">
+                        <h6 class="card-title opacity-75">Gênero Favorito</h6>
+                        <h4 class="fw-bold mt-2">@generoFavorito</h4>
+                        <i class="bi bi-tags-fill fs-1 opacity-25"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white fw-bold">Livros por Gênero</div>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var g in livrosPorGenero)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                @g.Key
+                                <span class="badge bg-primary rounded-pill">@g.Count()</span>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white fw-bold">Últimas Adições</div>
+                    <div class="list-group list-group-flush">
+                        @foreach (var livro in livros.TakeLast(3).Reverse())
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1 fw-bold">@livro.titulo</h6>
+                                    <small class="text-muted">Nota: @livro.avaliacao</small>
+                                </div>
+                                <p class="mb-1 small text-secondary">@livro.autor</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<LivroDTO>? livros;
+    private double mediaAvaliacao;
+    private int lidosEsteAno;
+    private string generoFavorito = "-";
+    private IEnumerable<IGrouping<string, LivroDTO>> livrosPorGenero = Enumerable.Empty<IGrouping<string, LivroDTO>>();
+    private string urlPlanilha = "https://script.google.com/macros/s/AKfycbyZaJmunoDpFGCJWYWaoZL7q8_-3Znr3xyvF23f6VX5ZDK9QFCl2fT72BTEMgcxz88x/exec";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Substitua pela sua URL real do Google Apps Script
+            var response = await Http.GetFromJsonAsync<List<LivroDTO>>(urlPlanilha);
+            
+            if (response != null)
+            {
+                livros = response;
+                CalcularMetricas();
+            }
+        }
+        catch (Exception ex) { Console.WriteLine(ex.Message); }
+    }
+
+    private void CalcularMetricas()
+    {
+        if (livros == null || !livros.Any()) return;
+
+        mediaAvaliacao = livros.Average(l => l.avaliacao);
+        
+        lidosEsteAno = livros.Count(l =>
+            DateTime.TryParse(l.dataLeitura?.ToString(), out var dt) && dt.Year == DateTime.Now.Year);
+
+        livrosPorGenero = livros.GroupBy(l => l.genero).OrderByDescending(g => g.Count());
+        
+        generoFavorito = livrosPorGenero.FirstOrDefault()?.Key ?? "N/A";
+    }
+
+    public class LivroDTO
+    {
+        public string titulo { get; set; } = "";
+        public string autor { get; set; } = "";
+        public string genero { get; set; } = "";
+        public object dataLeitura { get; set; }
+        public int avaliacao { get; set; }
+    }
+}
