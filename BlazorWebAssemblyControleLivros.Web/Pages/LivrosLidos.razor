@@ -60,12 +60,12 @@
 
 @code {
     private List<LivroDTO>? livros;
-    
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            
+
             livros = await Http.GetFromJsonAsync<List<LivroDTO>>("api/livros");
         }
         catch (Exception ex)
@@ -78,6 +78,7 @@
     // DTO simples para mapear o JSON do Google (letras minúsculas conforme o Script JS)
     public class LivroDTO
     {
+        public string id { get; set; } = "";
         public string titulo { get; set; } = "";
         public string autor { get; set; } = "";
         public string genero { get; set; } = "";

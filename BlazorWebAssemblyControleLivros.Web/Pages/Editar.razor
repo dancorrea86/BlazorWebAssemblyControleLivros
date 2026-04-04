@@ -10,35 +10,35 @@
         </div>
         <div class="card-body">
             <EditForm Model="@livro" OnValidSubmit="SalvarLivro" >
-                <div>
-                    <div>
+                <div class="row g-3">
+                    <div class="col-6">
                         <label for="titulo">Título:</label>
                         <InputText id="titulo" @bind-Value="livro.Titulo" class="form-control" />
                     </div>
                     
-                    <div>
+                    <div class="col-6">
                         <label for="autor">Autor:</label>
                         <InputText id="autor" @bind-Value="livro.Autor" class="form-control" />
                     </div>
                                         
-                    <div>
+                    <div class="col-4">
                         <label for="genero">Genero:</label>
                         <InputText id="genero" @bind-Value="livro.Genero" class="form-control" />
                     </div>
 
-                    <div>
+                    <div class="col-4">
                         <label for="data">Data Leitura:</label>
                         <InputDate id="data" @bind-Value="livro.DataLeitura" class="form-control" />
                     </div>
 
-                    <div>
+                    <div class="col-4">
                         <label for="avaliacao">Avaliacao:</label>
                         <InputNumber id="avaliacao" @bind-Value="livro.Avaliacao" class="form-control" />
                     </div>
 
-                    <div>
+                    <div class="col-12">
                         <label for="comentario">Comentarios:</label>
-                        <InputText id="comentario" @bind-Value="livro.Comentarios" class="form-control" />
+                        <InputTextArea id="comentario" @bind-Value="livro.Comentarios" class="form-control" rows="3" />
                     </div>
 
                     <div class="col-12 text-end">

@@ -12,7 +12,7 @@ namespace BlazorWebAssemblyControleLivros.Controllers
     public class LivrosController : ControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private const string UrlPlanilha = "https://script.google.com/macros/s/AKfycbyZaJmunoDpFGCJWYWaoZL7q8_-3Znr3xyvF23f6VX5ZDK9QFCl2fT72BTEMgcxz88x/exec";
+        private const string UrlPlanilha = "https://script.google.com/macros/s/AKfycbwk3sHFuYCiT_BrWpRpSehzgePU9rFBuqrvv_QgEM8p_9yrtfxcy6Rjc3JRCa47YVeQ/exec";
         private List<Livro>? livros;
 
         public LivrosController(IHttpClientFactory httpClientFactory)
@@ -28,9 +28,16 @@ namespace BlazorWebAssemblyControleLivros.Controllers
                 return BadRequest("Dados inválidos.");
             }
 
+            // Garante que o livro tenha um ID único antes de ir para a planilha
+            if (string.IsNullOrEmpty(livro.Id))
+            {
+                livro.Id = Guid.NewGuid().ToString().Substring(0, 8); // ID curto de 8 caracteres
+            }
+
             HttpClient? client = _httpClientFactory.CreateClient();
             string? json = JsonSerializer.Serialize(livro);
-            StringContent? content = new StringContent(json, Encoding.UTF8, "text/plain");
+
+            StringContent? content = new StringContent(json, Encoding.UTF8, "application/json");
 
             try
             {
