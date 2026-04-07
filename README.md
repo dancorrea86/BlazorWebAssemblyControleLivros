@@ -2,6 +2,11 @@
 
 Sistema moderno de gerenciamento de leitura desenvolvido com **Blazor WebAssembly** e **.NET 10**, utilizando uma arquitetura de API desacoplada e integração com **Google Sheets** como banco de dados persistente.
 
+![Alt text](https://github.com/dancorrea86/BlazorWebAssemblyControleFinancas/blob/master/images/Dashboard.png "Dashboard")
+
+![Alt text](https://github.com/dancorrea86/BlazorWebAssemblyControleFinancas/blob/master/images/Livros.png "Livros")
+
+
 ## 🎯 Objetivos do Projeto
 
 Este projeto foi desenvolvido com os seguintes objetivos de estudo e prática:
