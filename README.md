@@ -2,11 +2,20 @@
 
 Sistema moderno de gerenciamento de leitura desenvolvido com **Blazor WebAssembly** e **.NET 10**, utilizando uma arquitetura de API desacoplada e integração com **Google Sheets** como banco de dados persistente.
 
+## 🎯 Objetivos do Projeto
+
+Este projeto foi desenvolvido com os seguintes objetivos de estudo e prática:
+- **Blazor WebAssembly:** Exploração do framework para criação de SPAs modernas e performáticas.
+- **Servidores Linux:** Prática na configuração e deploy de aplicações .NET em ambiente Linux.
+- **Contêineres Docker:** Utilização de Docker para isolamento, portabilidade e padronização dos ambientes de desenvolvimento e produção.
+- **Escalabilidade:** Entendimento de como estruturar aplicações desacopladas prontas para orquestração.
+
 ## 🚀 Tecnologias Utilizadas
 
 - **Frontend:** Blazor WebAssembly (.NET 10)
 - **Backend:** ASP.NET Core Web API (.NET 10)
 - **Persistência:** Google Sheets (via Google Apps Script)
+- **Infraestrutura:** Docker, Servidor Linux
 - **Estilização:** CSS Isolado e Bootstrap
 - **Comunicação:** HttpClient Factory e JSON Serialization
 
@@ -31,9 +40,10 @@ O projeto segue uma estrutura de camadas para garantir separação de responsabi
 
 ### Pré-requisitos
 - .NET 10 SDK (ou superior)
+- Docker Desktop (opcional para rodar via contêiner)
 - Visual Studio 2022 ou VS Code
 
-### Passo a Passo
+### Passo a Passo Local
 
 1. **Clonar o repositório:**
    ```bash
@@ -53,8 +63,26 @@ O projeto segue uma estrutura de camadas para garantir separação de responsabi
    dotnet run
    ```
 
-4. **Acessar a aplicação:**
-   Abra seu navegador no endereço indicado no console (geralmente `https://localhost:7xxx`).
+### 🐳 Publicação com Docker
+
+Para facilitar a publicação em servidores Linux e garantir que o ambiente seja idêntico ao de desenvolvimento, você pode utilizar o Docker.
+
+#### Criando a Imagem da API:
+```bash
+# Navegue até a pasta da API
+cd BlazorWebAssemblyControleLivros.Api
+
+# Build da imagem
+docker build -t controle-livros-api .
+
+# Rodar o contêiner
+docker run -d -p 8080:8080 --name api-controle-livros controle-livros-api
+```
+
+#### Publicação no Linux:
+1. Garanta que o Docker esteja instalado no seu servidor Linux.
+2. Faça o push da imagem para um registro (Docker Hub, por exemplo) ou utilize Git para buildar diretamente no servidor.
+3. Configure um Proxy Reverso (como Nginx) para gerenciar o tráfego HTTPS e encaminhar para os contêineres.
 
 ## 🛠️ Estrutura de Pastas
 
