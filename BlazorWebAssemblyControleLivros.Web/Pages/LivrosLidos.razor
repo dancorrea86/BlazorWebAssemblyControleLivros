@@ -65,8 +65,10 @@
     {
         try
         {
-
-            livros = await Http.GetFromJsonAsync<List<LivroDTO>>("api/livros");
+            livros = new List<LivroDTO>();
+            var livro = new LivroDTO { autor = "J.R.R. Tolkien", titulo = "O Hobbit", dataLeitura = new DateTime(2025, 1, 27), avaliacao = 5, comentarios = "Lançado em 1937, O Hobbit é um divisor de águas na literatura de fantasia mundial." };
+            livros.Add(livro);
+            // livros = await Http.GetFromJsonAsync<List<LivroDTO>>("api/livros");
         }
         catch (Exception ex)
         {

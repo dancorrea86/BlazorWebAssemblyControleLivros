@@ -105,16 +105,19 @@
     {
         try
         {
-            // Substitua pela sua URL real do Google Apps Script
-            var response = await Http.GetAsync("api/livros");
+            livros = new List<LivroDTO>();
+            var livro = new LivroDTO { autor = "J.R.R. Tolkien", titulo = "O Hobbit", dataLeitura = new DateTime(2025, 1, 27), avaliacao = 5};
+            livros.Add(livro);
+            // // Substitua pela sua URL real do Google Apps Script
+            // var response = await Http.GetAsync("api/livros");
 
             
-            if (response != null)
-            {
-                var json = await response.Content.ReadAsStringAsync();
-                livros = JsonSerializer.Deserialize<List<LivroDTO>>(json);
-                CalcularMetricas();
-            }
+            // if (response != null)
+            // {
+            //     var json = await response.Content.ReadAsStringAsync();
+            //     livros = JsonSerializer.Deserialize<List<LivroDTO>>(json);
+            //     CalcularMetricas();
+            // }
         }
         catch (Exception ex) { Console.WriteLine(ex.Message); }
     }

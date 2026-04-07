@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/Images/">
+    <File Path="Images/Cadastro.png" />
+    <File Path="Images/Dashboard.png" />
+    <File Path="Images/Livros.png" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".gitignore" />
   </Folder>
