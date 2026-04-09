@@ -12,7 +12,7 @@ namespace BlazorWebAssemblyControleLivros.Controllers
     public class LivrosController : ControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private const string UrlPlanilha = "https://script.google.com/macros/s/AKfycbwk3sHFuYCiT_BrWpRpSehzgePU9rFBuqrvv_QgEM8p_9yrtfxcy6Rjc3JRCa47YVeQ/exec";
+        private const string UrlPlanilha = "https://script.google.com/macros/s/AKfycbyl6ADgvt6hQnAo_k1LZZqou0N0fYtiRYJWOTO6o-1eUm2qaDVAm154jqAxitBBcL0l/exec";
         private List<Livro>? livros;
 
         public LivrosController(IHttpClientFactory httpClientFactory)
@@ -59,7 +59,6 @@ namespace BlazorWebAssemblyControleLivros.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            
             HttpClient? client = _httpClientFactory.CreateClient();
 
             try
@@ -68,7 +67,6 @@ namespace BlazorWebAssemblyControleLivros.Controllers
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Precisa ler a string e converter manualmente
                     var json = await response.Content.ReadAsStringAsync();
                     livros = JsonSerializer.Deserialize<List<Livro>>(json);
 
@@ -77,6 +75,36 @@ namespace BlazorWebAssemblyControleLivros.Controllers
                     {
                         return Ok(livros);
                     }
+                }
+
+                return StatusCode((int)response.StatusCode, "Erro ao integrar com Google Sheets.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var client = _httpClientFactory.CreateClient();
+
+            try
+            {
+                string urlFinal = $"{UrlPlanilha}?id={id}";
+
+                HttpResponseMessage response = await client.GetAsync(urlFinal);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string resultado = await response.Content.ReadAsStringAsync();
+
+                    if (resultado.Contains("Sucesso"))
+                    {
+                        return Ok(new { message = resultado });
+                    }
+                    return BadRequest(resultado);
                 }
 
                 return StatusCode((int)response.StatusCode, "Erro ao integrar com Google Sheets.");

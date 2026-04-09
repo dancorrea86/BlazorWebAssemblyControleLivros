@@ -50,6 +50,11 @@
                             <td class="text-truncate" style="max-width: 200px;" title="@livro.comentarios">
                                 @livro.comentarios
                             </td>
+                            <td>
+                                
+                                <button class="btn btn-sm btn-outline-danger" title="Excluir" @onclick="(() => Delete(livro.id))"><i class="bi bi-trash"></i></button>
+                                
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -65,10 +70,20 @@
     {
         try
         {
+            livros = await Http.GetFromJsonAsync<List<LivroDTO>>("api/livros");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar: {ex.Message}");
             livros = new List<LivroDTO>();
-            var livro = new LivroDTO { autor = "J.R.R. Tolkien", titulo = "O Hobbit", dataLeitura = new DateTime(2025, 1, 27), avaliacao = 5, comentarios = "Lançado em 1937, O Hobbit é um divisor de águas na literatura de fantasia mundial." };
-            livros.Add(livro);
-            // livros = await Http.GetFromJsonAsync<List<LivroDTO>>("api/livros");
+        }
+    }
+
+    private async void Delete(string ID)
+    {
+        try
+        {
+            await Http.DeleteAsync($"api/livros/{ID}");
         }
         catch (Exception ex)
         {
