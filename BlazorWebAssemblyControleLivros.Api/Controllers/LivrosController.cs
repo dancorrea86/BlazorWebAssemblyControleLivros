@@ -12,7 +12,7 @@ namespace BlazorWebAssemblyControleLivros.Controllers
     public class LivrosController : ControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private const string UrlPlanilha = "https://script.google.com/macros/s/AKfycbyl6ADgvt6hQnAo_k1LZZqou0N0fYtiRYJWOTO6o-1eUm2qaDVAm154jqAxitBBcL0l/exec";
+        private const string UrlPlanilha = "https://script.google.com/macros/s/AKfycbyfOjgRGWaxW2N_b8whd1y8saMIHEf7zIdz63RQtyxPJcC5hUGiHLi_XvcWIQeYJOmL/exec";
         private List<Livro>? livros;
 
         public LivrosController(IHttpClientFactory httpClientFactory)
