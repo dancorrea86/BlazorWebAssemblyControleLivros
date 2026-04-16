@@ -1,13 +1,31 @@
-﻿namespace BlazorWebAssemblyControleLivros.Models
+﻿using System.Text.Json.Serialization;
+
+namespace BlazorWebAssemblyControleLivros.Models
 {
     public class Livro
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-        public string Titulo { get; set; } = string.Empty;
-        public string Autor { get; set; } = string.Empty;
-        public string Genero { get; set; } = "Ficção";
-        public DateTime? DataLeitura { get; set; } = DateTime.Now;
-        public int Avaliacao { get; set; } = 5;
-        public string Comentarios { get; set; } = string.Empty;
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("titulo")]
+        public string Titulo { get; set; }
+
+        [JsonPropertyName("autor")]
+        public string Autor { get; set; }
+
+        [JsonPropertyName("genero")]
+        public string Genero { get; set; }
+
+        [JsonPropertyName("dataLeitura")]
+        public DateTime? DataLeitura { get; set; }
+
+        [JsonPropertyName("avaliacao")]
+        public int Avaliacao { get; set; }
+
+        [JsonPropertyName("comentarios")]
+        public string Comentarios { get; set; }
+
+        [JsonPropertyName("dataRegistro")]
+        public DateTime? DataRegistro { get; set; }
     }
 }

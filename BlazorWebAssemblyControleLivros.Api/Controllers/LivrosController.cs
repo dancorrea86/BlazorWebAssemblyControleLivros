@@ -12,7 +12,7 @@ namespace BlazorWebAssemblyControleLivros.Controllers
     public class LivrosController : ControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private const string UrlPlanilha = "https://script.google.com/macros/s/AKfycbyfOjgRGWaxW2N_b8whd1y8saMIHEf7zIdz63RQtyxPJcC5hUGiHLi_XvcWIQeYJOmL/exec";
+        private const string UrlPlanilha = "https://script.google.com/macros/s/AKfycbzpNUkxPNvL0eKK5zI5OI8UkMate60OM2cRx8scL3vuEOX1xluvo1yUs_IuInYugl_Q/exec";     
         private List<Livro>? livros;
 
         public LivrosController(IHttpClientFactory httpClientFactory)
@@ -68,6 +68,12 @@ namespace BlazorWebAssemblyControleLivros.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
+
+                    var options = new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true
+                    };
+
                     livros = JsonSerializer.Deserialize<List<Livro>>(json);
 
 

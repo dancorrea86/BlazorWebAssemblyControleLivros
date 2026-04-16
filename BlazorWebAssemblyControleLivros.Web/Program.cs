@@ -10,7 +10,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 // Configura o HttpClient para apontar para o seu Backend
 builder.Services.AddScoped(sp => new HttpClient
 {
-    BaseAddress = new Uri("http://localhost:5000/") // URL da sua API ASP.NET
+    BaseAddress = new Uri("https://localhost:7296/") // URL da sua API ASP.NET
 });
 
 
